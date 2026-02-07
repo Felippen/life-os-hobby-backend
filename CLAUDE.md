@@ -1,84 +1,46 @@
-# CLAUDE.md
+# AI Co-Developer
 
-## Project Overview
+## Current Phase
+Phase 1C — Local Validation + Cloud Connection
 
-NestJS chat application backend with Supabase (PostgreSQL + Auth) and Google Gemini AI integration. Manages conversations and messages, auto-generating AI responses and conversation titles.
+## Stack
+NestJS | Supabase (PostgreSQL + Auth + RLS) | Nordcraft | Gemini 1.5-pro | Cursor AI
 
-## Tech Stack
+## Vision (one-liner — full: memory/vision.md)
+AI-first personal productivity platform. Beautiful + powerful. Full context awareness is the differentiator.
 
-- **Framework:** NestJS 11 (Express adapter)
-- **Language:** TypeScript 5.7 (ES2023 target, nodenext modules)
-- **Database:** Supabase PostgreSQL with Row-Level Security (RLS)
-- **Auth:** JWT via Supabase (custom guard, not Passport strategies)
-- **AI:** Google Gemini (`@google/generative-ai`)
-- **Validation:** class-validator + class-transformer
-- **Testing:** Jest 30 + Supertest
+## What's Done (one line per completed phase)
+- Phases 1A/1B/1B+: Backend + Chat + AI + Testing ✓ (Session 1, Feb 7 2026)
 
-## Commands
+## What's Next (Priority Order)
+1. Start Docker + local Supabase → run E2E tests
+2. Link Supabase CLI to cloud → validate
+3. Choose deployment platform
+4. Begin Nordcraft frontend
 
-```bash
-# Development
-npm run start:dev          # Watch mode
-npm run start:debug        # Debug with inspector
+## Active Blockers
+- Docker Desktop must be running before Supabase CLI
+- Supabase project ref needed for cloud linking
+- Nordcraft account status unknown
 
-# Build
-npm run build              # Compile TypeScript (nest build)
-npm run start:prod         # Run compiled output
+## Quick Commands
+| Action | Command |
+|--------|---------|
+| Start local Supabase | `npm run supabase:start` |
+| Run tests | `npm run test:e2e` |
+| Start backend | `npm run start:dev` |
+| Link to cloud | `npx supabase link --project-ref REF` |
 
-# Code Quality
-npm run format             # Prettier (single quotes, trailing commas)
-npm run lint               # ESLint with auto-fix
+## Key Decisions (last 5 — full log: memory/decisions.md)
+- NestJS over BuildShip (more control)
+- Supabase Auth email/password (Phase 1)
+- Gemini 1.5-pro (context-aware chat)
+- Local-first dev with Docker
 
-# Testing
-npm run test               # Unit tests
-npm run test:e2e           # Full e2e (resets Supabase DB first)
-npm run test:e2e:local     # E2e without DB reset
+## Notable Issues (topic → session — full index: memory/index.md)
+- Gemini model deprecation → Session 1
+- DB constraint issues → Session 1
 
-# Supabase
-npm run supabase:start     # Start local Supabase
-npm run supabase:stop      # Stop local Supabase
-npm run supabase:reset     # Reset local database
-```
-
-## Project Structure
-
-```
-src/
-├── main.ts                 # Bootstrap (CORS, validation pipe)
-├── app.module.ts           # Root module
-├── auth/                   # JWT guard + decorators (@CurrentUser, @AccessToken)
-├── supabase/               # Global Supabase client service (anon, admin, auth clients)
-├── conversations/          # CRUD for conversations
-├── messages/               # Message creation + AI response generation
-└── ai/                     # Google Gemini integration (chat + title generation)
-
-test/
-├── test-helpers.ts         # createTestApp(), createTestUser(), cleanupTestUser()
-├── *.e2e-spec.ts           # E2e tests (app, conversations, messages)
-└── setup-e2e.ts            # Loads env vars for test environment
-
-supabase/
-└── migrations/             # SQL migrations (conversations + messages tables with RLS)
-```
-
-## Architecture Notes
-
-- **No ORM** — uses Supabase client directly (`.from('table').select()/.insert()`, etc.)
-- **Three Supabase client types:** `getClient()` (anon), `getAdminClient()` (service role, bypasses RLS), `getClientWithAuth(token)` (user-scoped)
-- **Auth flow:** Bearer token extracted → Supabase verifies JWT → RLS enforces row ownership
-- **AI flow:** User sends message → stored → Gemini generates response → response stored → first message auto-generates conversation title
-- **DTOs** use class-validator decorators for request validation
-- **E2e tests** use real local Supabase instance with test user signup/cleanup
-
-## Database Schema
-
-- **conversations:** `id (UUID)`, `user_id (FK auth.users)`, `title`, `created_at`, `updated_at`
-- **messages:** `id (UUID)`, `conversation_id (FK)`, `role ('user'|'assistant')`, `content`, `created_at`
-- RLS policies enforce user can only access own conversations and their messages
-
-## Environment Variables
-
-See `.env.local.example` for required vars:
-- `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
-- `GEMINI_API_KEY`
-- `PORT`, `NODE_ENV`, `FRONTEND_URL` (CORS)
+## Recent Session
+Session 1 (Feb 7, 2026): Built entire backend + testing infra. All 6 modules complete.
+→ All sessions: memory/sessions/
