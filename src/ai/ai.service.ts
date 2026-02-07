@@ -13,9 +13,9 @@ export class AiService {
     const apiKey = this.configService.getOrThrow<string>('GEMINI_API_KEY');
     this.genAI = new GoogleGenerativeAI(apiKey);
 
-    // Using gemini-pro model
+    // Using gemini-2.0-flash (stable, widely available)
     this.model = this.genAI.getGenerativeModel({
-      model: 'gemini-pro',
+      model: 'gemini-2.0-flash',
     });
   }
 

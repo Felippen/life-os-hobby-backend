@@ -1,0 +1,3 @@
+-- Seed file runs after migrations during db reset
+-- Add any test/development data below
+-- Local Supabase auth has no restrictions - test users can be created via signUp
