@@ -33,3 +33,7 @@ coverage
 *.tsbuildinfo
 out-tsc
 .turbo
+
+# GitHub CLI download (temporary)
+gh.zip
+gh_2.86.0_macOS_arm64/
